@@ -156,16 +156,30 @@ router.post('/verify', async (ctx, next) => {
     subject: '注册码',
     html: `邀请码：${ko.code}`
   }
-  await transporter.sendMail(mailOption, (error, info) => {
-    if (error) {
-      return console.log(error)
-    } else {
-      Store.hmset(`nodemail:${ko.user}`, 'code', ko.code, 'expire', ko.expire, 'email', ko.email)
+  let isSendMail = await new Promise(
+    function (resolve, reject) {
+      transporter.sendMail(mailOption, (error, info) => {
+        if (error) {
+          resolve(false)
+          return console.log(error)
+        } else {
+          Store.hmset(`nodemail:${ko.user}`, 'code', ko.code, 'expire', ko.expire, 'email', ko.email)
+          resolve(true)
+        }
+      })
     }
-  })
-  ctx.body = {
-    code: 0,
-    msg: '验证码已发送，有效期一分钟'
+  )
+
+  if (isSendMail) {
+    ctx.body = {
+      code: 0,
+      msg: '验证码已发送，有效期一分钟'
+    }
+  }else{
+    ctx.body = {
+      code: -1,
+      msg:'错误'
+    }
   }
 
 })
