@@ -95,6 +95,7 @@ router.post('/singup', async (ctx) => {
   }
 })
 
+
 //登陆
 router.post('/signin', async (ctx, next) => {
   return Passport.authenticate('local', function (err, user, info, atatus) {
@@ -109,7 +110,6 @@ router.post('/signin', async (ctx, next) => {
           code: 0,
           msg: '登陆成功'
         }
-        console.log(user)
         return ctx.login(user)
       } else {
         ctx.body = {
@@ -120,6 +120,7 @@ router.post('/signin', async (ctx, next) => {
     }
   })(ctx, next)
 })
+
 
 //邮件验证
 router.post('/verify', async (ctx, next) => {
@@ -132,6 +133,8 @@ router.post('/verify', async (ctx, next) => {
     }
     return false
   }
+
+
   //发邮件
   let transporter = nodeMailer.createTransport({
     host: Config.smtp.host,
@@ -142,6 +145,8 @@ router.post('/verify', async (ctx, next) => {
       pass: Config.smtp.pass
     }
   })
+
+
   //接收方
   let ko = {
     code: Config.smtp.code(),
@@ -184,6 +189,7 @@ router.post('/verify', async (ctx, next) => {
 
 })
 
+
 //退出
 router.get('/exit', async (ctx, next) => {
   await ctx.logout()
@@ -198,15 +204,15 @@ router.get('/exit', async (ctx, next) => {
   }
 })
 
-//获取用户名
 
+//获取用户名
 router.get('/getUser', async (ctx) => {
   //passport固定api
   if (ctx.isAuthenticated()) {
     const {
       username,
       email
-    } = ctx.session.Passport.user;
+    } = ctx.session.passport.user;
     ctx.body = {
       user: username,
       email
