@@ -1,5 +1,5 @@
 export default {
-  dbs: 'mongodb://root:123456@47.244.185.66:27017/mt?authSource=admin',
+  dbs: 'mongodb://admin:123456@47.244.185.66:27017/mt?authSource=admin',
   redis: {
     get host() {
       return '47.244.185.66'

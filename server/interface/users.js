@@ -73,7 +73,6 @@ router.post('/singup', async (ctx) => {
       username,
       password
     })
-
     if (res.data && res.data.code == 0) {
       ctx.body = {
         code: 0,
@@ -110,6 +109,7 @@ router.post('/signin', async (ctx, next) => {
           code: 0,
           msg: '登陆成功'
         }
+        console.log(user)
         return ctx.login(user)
       } else {
         ctx.body = {

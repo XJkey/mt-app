@@ -7,7 +7,7 @@ const {
 } = require('nuxt')
 import mongoose from 'mongoose';
 import bodyParser from 'koa-bodyparser';
-import sesstion from 'koa-generic-session';
+import session from 'koa-generic-session';
 import Redis from 'koa-redis';
 import json from 'koa-json';
 import dbConfig from './dbs/config';
@@ -29,9 +29,9 @@ async function start() {
       port = process.env.PORT || 3000
   } = nuxt.options.server
   //sesstion
-  app.key = ['mt', 'keykey']
+  app.keys = ['mt', 'keykey']
   app.proxy = true;
-  app.use(sesstion({
+  app.use(session({
     key: 'mt',
     prefix: 'mt:uid',
     store: new Redis({
