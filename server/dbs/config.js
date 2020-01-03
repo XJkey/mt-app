@@ -8,7 +8,7 @@ export default {
       return 6379
     },
     get password() {
-      return "12345678"
+      return "123456"
     }
   },
   smtp: {
