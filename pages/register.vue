@@ -41,6 +41,7 @@
 </template>
 
 <script>
+  import CryptoJs from 'crypto-js';
   export default {
     data() {
       return {
@@ -100,10 +101,11 @@
     methods: {
       sendMsg: function () {
         const self = this;
-        let namePass, emailPass
-        if (self.timerid) {
+        let namePass, emailPass;
+        if (self.isTimer) {
           return false
         }
+        self.isTimer=true;
         this.$refs['ruleForm'].validateField('name', (valid) => {
           namePass = valid
         })
@@ -124,23 +126,52 @@
             data
           }) => {
             if (status === 200 && data && data.code === 0) {
-              let count = 60;
-              self.statusMsg = `验证码已发送，剩余${count}秒`
+              let count = 6;
+              self.statusMsg = `验证码已发送，剩余${count}秒`            
               self.timerid = setInterval(function () {
                 self.statusMsg = `验证码已发送，剩余${--count}秒`
                 if (count === 0) {
-                  clearInterval(self.timerid);
                   self.statusMsg = ''
-                  self.timerid=null;
+                  self.isTimer = false;
+                  clearInterval(self.timerid);
                 }
               }, 1000)
             } else {
+              self.isTimer = false;
               self.statusMsg = data.msg
             }
           })
         }
       },
-      register: function () {}
+      register: function () {
+        let self = this;
+        this.$refs["ruleForm"].validate((valid) => {
+          if (valid) {
+            self.$axios.post('/users/singup', {
+              username: window.encodeURIComponent(self.ruleForm.name),
+              password: CryptoJs.MD5(self.ruleForm.pwd).toString(),
+              email: self.ruleForm.email,
+              code: self.ruleForm.code
+            }).then(({
+              status,
+              data
+            }) => {
+              if (status === 200) {
+                if (data && data.code === 0) {
+                  location.href = '/login'
+                } else {
+                  self.error = data.msg
+                }
+              } else {
+                self.error = `服务器出错，错误码：${status}`
+              }
+              setTimeout(function () {
+                self.error = ""
+              }, 1500)
+            })
+          }
+        })
+      }
     },
     layout: 'blank'
   }

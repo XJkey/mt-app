@@ -69,7 +69,7 @@ router.post('/singup', async (ctx) => {
     email
   })
   if (nuser) {
-    let res = await axios.post('/user/singin', {
+    let res = await axios.post('/users/signin', {
       username,
       password
     })
@@ -97,7 +97,7 @@ router.post('/singup', async (ctx) => {
 })
 
 //登陆
-router.post('/sing', async (ctx, next) => {
+router.post('/signin', async (ctx, next) => {
   return Passport.authenticate('local', function (err, user, info, atatus) {
     if (err) {
       ctx.body = {
