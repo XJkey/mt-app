@@ -36,13 +36,20 @@ async function start() {
   app.use(session({
     key: 'mt',
     prefix: 'mt:uid',
+    rolling:true,
+    //ttl:10 * 1000,
     store: new Redis({
       port: dbConfig.redis.post, // Redis port
       host: dbConfig.redis.host, // Redis host
       family: 4, // 4 (IPv4) or 6 (IPv6)
       password: dbConfig.redis.password,
       db: 0
-    })
+    }),
+    cookie:{
+      maxAge: 24 * 60 * 60 * 1000
+    },
+    errorHandler(err, type, ctx){
+    }
   }))
 
   app.use(bodyParser({
