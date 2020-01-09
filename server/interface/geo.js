@@ -25,6 +25,13 @@ router.get('/getPosition', async (ctx) => {
     }
   }
 })
+
+
+/**
+ * @description: 获取所有省份
+ * @param {type} 
+ * @return: 
+ */
 router.get('/province', async (ctx) => {
   // let province = await Province.find();
   // ctx.body = {
@@ -47,6 +54,11 @@ router.get('/province', async (ctx) => {
     }
 })
 
+/**
+ * @description: 获取城市
+ * @param {id:省份id} 
+ * @return: 
+ */
 router.get('/province/:id', async (ctx) => {
   // let city = await City.findOne({id: ctx.params.id})
   //
