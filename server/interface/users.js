@@ -168,7 +168,9 @@ router.post('/verify', async (ctx, next) => {
           resolve(false)
           return console.log(error)
         } else {
-          Store.hmset(`nodemail:${ko.user}`, 'code', ko.code, 'expire', ko.expire, 'email', ko.email)
+          Store.hmset(`nodemail:${ko.user}`, 'code', ko.code, 'expire', ko.expire, 'email', ko.email);
+          //设置数据有效期
+          Store.expire(`nodemail:${ko.user}`, 120);
           resolve(true)
         }
       })
